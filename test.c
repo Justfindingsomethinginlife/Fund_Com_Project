@@ -13,6 +13,14 @@ void gotoxy( int column, int line )
 					    );
 }
 
+typedef struct player_1{
+	int player_x;
+	int player_y;
+	char playerchar;
+	int score;
+}player;
+
+void update_screen1(char screen[][30],int player_x, int player_y, char playerchar,char color[][30]);
 void update_screen(char screen[][30],int player_x, int player_y, char playerchar);
 int move(char screen[][30],int *player_x,int *player_y, char *playerchar,int *score);
 void Welcome();
@@ -21,11 +29,12 @@ void Menu(int option);
 
 int main()
 {
-	char area[30][30];char modesel;
+	player player1;
+	char area[30][30];char modesel;char color[30][30];
 	int player_x,player_y;int option=0;
 	player_x=3;player_y=3;
 	char playerchar = '^';
-	
+
 	for(int i=0;i<30;i++)
 	{
 		for(int j=0;j<30;j++)
@@ -34,6 +43,15 @@ int main()
 			else area[i][j] = ' '; 
 		}
 	}
+
+	for(int i=0;i<30;i++)
+        {
+                for(int j=0;j<30;j++)
+                {
+                        if(i==1 || i==28 || j==1 || j==28)color[i][j]=240;
+			else color[i][j];
+                }
+        }
 	//WELCOME!
 	Welcome();
 	
@@ -105,12 +123,25 @@ int main()
 	while(1)
 	{
 		update_screen(area,player_x,player_y,playerchar);
+		//update_screen1(area,player_x,player_y,playerchar,color);
 		if(move(area,&player_x,&player_y,&playerchar,&score) == 0)
-		{printf("%d\n",score);return 0;}
-		printf("%c ",playerchar);
+		{printf("%d\n",score);break;}
+		printf("%c ",playerchar);printf("score = %d",score);
 		//if(area[player_y][player_x] == 'R' || area[player_y][player_x] == 'W')score++;
 		gotoxy(0,0);
 	}
+
+	system("cls");
+	printf("Total Common : %d\n-----------------\n", score);
+	Sleep(1000);
+	printf("Total Uncommon : %d\n-----------------\n",score);
+	Sleep(1000);
+	printf("Total Rare : %d\n-----------------\n",score);
+	Sleep(1000);
+	printf("Total Legendary : %d\n-----------------\n",score);
+	Sleep(1000);
+	printf("Total : %d\n",score);
+	printf("\x1b[33mCash\x1b[39m : \x1b[33m%d\x1b[39m", score*3);
 	
 
 }
@@ -178,10 +209,12 @@ void update_screen(char screen[][30],int player_x, int player_y, char playerchar
 	}
 }
 
+
 void help_screen()
 {
 	printf("WORK IN PROGRESS");
 }
+
 
 void Menu(int option)
 {	
